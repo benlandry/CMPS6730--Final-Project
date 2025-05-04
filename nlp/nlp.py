@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-"""Main module."""
 """
 AI Memory Contamination Detection System
 - Detects when an AI model's responses are influenced by previously processed data
@@ -64,8 +61,8 @@ def fetch_stackoverflow_data():
     """
     print("Fetching Stack Overflow data...")
     
-    # For demonstration, create synthetic data based on Stack Overflow patterns
-    # Could fetch real data from Stack Exchange Data Dump
+    # For demonstration, we'll create synthetic data based on Stack Overflow patterns
+    # In a production system, you would fetch real data from Stack Exchange Data Dump
     
     # Create synthetic data
     questions = []
@@ -363,7 +360,6 @@ class ContaminationMitigator:
             sources = self.find_contamination_sources(text)
             
             if sources:
-                # Create a warning about the specific sensitive information
                 warning = (
                     "I notice your query contains potentially sensitive information "
                     f"related to {', '.join(sources)}. To protect privacy and security, "
@@ -400,18 +396,16 @@ def main():
     # 1. Data preparation
     df = fetch_stackoverflow_data()
     
-    # Train/test split
     train_df, test_df = train_test_split(
         df, 
         test_size=cfg.TEST_SIZE, 
         random_state=cfg.RANDOM_SEED,
-        stratify=df['label']  # Maintain class distribution
+        stratify=df['label']  
     )
     
     print(f"Train set: {len(train_df)} samples")
     print(f"Test set: {len(test_df)} samples")
     
-    # Class distribution
     print("\nClass distribution:")
     print(f"Train - Clean: {(train_df['label'] == 0).sum()}, Contaminated: {(train_df['label'] == 1).sum()}")
     print(f"Test - Clean: {(test_df['label'] == 0).sum()}, Contaminated: {(test_df['label'] == 1).sum()}")
@@ -483,8 +477,7 @@ def main():
         
         if val_accuracy > best_accuracy:
             best_accuracy = val_accuracy
-            # In a real scenario, you would save the model here
-            # torch.save(model.state_dict(), 'best_model.bin')
+            
     
     print(f"\nTraining completed. Best accuracy: {best_accuracy:.4f}")
     
@@ -512,7 +505,6 @@ def main():
     # 8. Create mitigator
     mitigator = ContaminationMitigator(model, tokenizer)
     
-    # 9. Demo
     print("\nTesting the contamination mitigator:")
     
     # Test cases
@@ -544,8 +536,7 @@ def main():
             safe_response = mitigator.generate_safe_response(text, mock_response)
             print(f"Safe response: {safe_response}")
 
-# Example of how to run this in a Google Colab notebook
-# Visualization helper functions
+
 def create_detailed_results_df(model, tokenizer, test_df, device):
     """Create a detailed dataframe with predictions and contamination probabilities."""
     model.eval()
@@ -628,7 +619,7 @@ def visualize_results(results_df):
     plt.grid(True, alpha=0.3)
     plt.show()
     
-    # 3. Confusion Matrix with percentages
+    # 3. Confusion Matrix 
     from sklearn.metrics import confusion_matrix
     cm = confusion_matrix(results_df['true_label'], results_df['predicted_label'])
     cm_norm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
@@ -715,18 +706,18 @@ def enhanced_main():
     # 1. Data preparation
     df = fetch_stackoverflow_data()
     
-    # Train/test split
+ 
     train_df, test_df = train_test_split(
         df, 
         test_size=cfg.TEST_SIZE, 
         random_state=cfg.RANDOM_SEED,
-        stratify=df['label']  # Maintain class distribution
+        stratify=df['label'] 
     )
     
     print(f"Train set: {len(train_df)} samples")
     print(f"Test set: {len(test_df)} samples")
     
-    # Class distribution
+
     print("\nClass distribution:")
     print(f"Train - Clean: {(train_df['label'] == 0).sum()}, Contaminated: {(train_df['label'] == 1).sum()}")
     print(f"Test - Clean: {(test_df['label'] == 0).sum()}, Contaminated: {(test_df['label'] == 1).sum()}")
@@ -798,8 +789,6 @@ def enhanced_main():
         
         if val_accuracy > best_accuracy:
             best_accuracy = val_accuracy
-            # In a real scenario, you would save the model here
-            # torch.save(model.state_dict(), 'best_model.bin')
     
     print(f"\nTraining completed. Best accuracy: {best_accuracy:.4f}")
     
@@ -828,7 +817,7 @@ def enhanced_main():
     # Create visualizations
     visualize_results(results_df)
     
-    # 8. Create mitigator and demo
+    # 8. Create mitigator
     mitigator = ContaminationMitigator(model, tokenizer)
     
     print("\nTesting the contamination mitigator with sample cases:")
